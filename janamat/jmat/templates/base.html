@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <title>Janamat</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+   
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{% static 'signIn/css/style.css' %}">
+    <style>
+      .pb-cmnt-container {
+        font-family: Lato;
+        margin-top: 100px;
+      }
+
+      .pb-cmnt-textarea {
+        background: transparent;
+        resize: none;
+        padding: 20px;
+        height: 130px;
+        width: 100%;
+        border: 1px solid #f2f2f2;
+      }
+
+      .infinite-item,
+      .loading {
+        margin-bottom: 5px;
+        background-color: #1eaedb;
+        color: #fff;
+        text-align: center;
+        padding: 25px 0;
+      }
+
+      .loading {
+        background-color: #333;
+      }
+    </style>
+  </head>
+  <body
+    style="
+        background: url('{% static 'img/bg1.jpg' %}');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    "
+  >
+    <div class="wrapper d-flex align-items-stretch">
+      <div class="fixed-top d-flex bg-white">
+        <header><h1>Janmat.com</h1></header>
+      </div>
+      <nav id="sidebar" class="active" style="margin-top: 115px;">
+        <header
+          style="
+            margin: 22px 34px;
+            text-align: center;
+            font-size: 2em;
+            font-weight: bolder;
+            position: fixed;
+          "
+        >
+          Blog content
+        </header>
+        <div class="p-4 pt-5" style="margin-left: 30px;">
+          <ul class="list-unstyled components mb-5">
+            {% for chellenge in chellenge_list %}
+            <li class>
+              <a class="js-scroll-trigger" href="?chellenge_id={{chellenge.id}}"
+                >{{chellenge.chellengeName}}</a
+              >
+            </li>
+            {% endfor %}
+          </ul>
+          {% comment %}
+          <div class="footer">
+            <p>
+              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+              Copyright &copy;
+              <script>
+                document.write(new Date().getFullYear());
+              </script>
+              All rights reserved | This template is made with
+              <i class="icon-heart" aria-hidden="true"></i> by
+              <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
+              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </p>
+          </div>
+          {% endcomment %}
+        </div>
+      </nav>
+
+      <!-- Page Content  -->
+
+      <div id="content" class="p-4 p-md-5" style="margin-top: 120px;">
+        <nav
+          class="navbar fixed-top navbar-expand-lg navbar-light bg-light"
+          style="margin-top: 50px;"
+        >
+          <div class="container-fluid">
+            <button type="button" id="sidebarCollapse" class="btn btn-primary">
+              <i class="fa fa-bars"></i>
+              <span class="sr-only">Toggle Menu</span>
+            </button>
+            <button
+              class="btn btn-dark d-inline-block d-lg-none ml-auto"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item">
+                  <a class="nav-link" href="/">Home</a>
+                </li>
+                {% if user.is_authenticated %}
+
+              <li class="nav-item">
+                {% if profileImage == "False" %}
+                <img src="{% static 'img/pi.jpg' %}" alt="no pic" class="profile" data-toggle="modal"
+                  data-target="#exampleModal" />
+
+                {% else %}
+                <img id="Myimg" src="{{profileImage.url}}" alt="" class="profile" data-toggle="modal"
+                  data-target="#exampleModal" />
+
+                {% endif %}
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" data-backdrop="" data-keyboard="false" tabindex="-1"role="dialog"
+                  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                          Upload your profile image
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <form method="POST" enctype="multipart/form-data" action="####">
+                          {% csrf_token %}
+                          <div class="form-group">
+                            <img src="{{profileImage.url}}" class="img-thumbnail my-10 rounded mx-auto d-block " alt=""
+                              style="
+                             height: 260px;
+                         ">
+                            <input type="file" name="pic_update" class="form-control-file my-3"
+                              id="exampleFormControlFile1" required />
+                          </div>
+
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                          Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                          Save changes
+                        </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+                </li>
+                <li
+                  class="nav-item"
+                  style="
+                    font-size: 15px;
+                    padding: 7px;
+                    font-weight: bold;
+                    color: black;
+                    text-align: center;
+                  "
+                >
+                  {{firstName}}
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'signoutPage' %}"
+                    >Sign Out</a
+                  >
+                </li>
+                {% else %}
+                <li class="nav-item">
+                  <!-- Button trigger modal -->
+                  <a class="nav-link " style="cursor: pointer;" data-toggle="modal" data-target="#staticBackdrop" 
+                    >SignIn/SignUp</a
+                  >
+                  
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-backdrop="" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Sign In/Sign Up</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="login-wrap">
+          <div class="login-html">
+              <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign
+                  In</label>
+              <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+              <div class="login-form">
+  
+                  <div class="sign-in-htm">
+                      <form method="POST" action="{% url 'signinPage' %}">
+                          {% csrf_token %}
+                          <div>
+                              {% if messages %}
+                              <ul class="messages">
+                                {% for message in messages %}
+                                <li>
+                                  <div class="alert alert-danger" role="alert">
+                                    {{message}}
+                                  </div>
+                                </li>
+                  
+                                {% endfor %}
+                              </ul>
+                              {% endif %}
+                            </div>
+  
+                          <div class="group">
+                              <label for="user" class="label">Username</label>
+                              <input  id="user" type="text" class="input" name="username" placeholder="Username or Email" required>
+                          </div>
+                          <div class="group">
+                              <label for="pass" class="label">Password</label>
+                              <input id="pass" type="password" class="input" data-type="password" name="password"
+                                  placeholder="Password"required>
+                          </div>
+                          <div class="group">
+                              <input id="check" type="checkbox" class="check" checked>
+                              <label for="check"><span class="icon"></span> Keep me Signed in</label>
+                          </div>
+                          <div class="group">
+                              <input type="submit" class="button" value="Sign In">
+                          </div>
+                          <div class="hr"></div>
+                          <div class="foot-lnk">
+                              <a href="#forgot">Forgot Password?</a>
+                          </div>
+                      </form>
+                  </div>
+                  <div class="sign-up-htm">
+                      <form action="{% url 'signupPage' %}" method="POST">
+                          {% csrf_token %} 
+                          <div class="group">
+                              <label for="firstname" class="label">First Name</label>
+                              <input id="firstname" name="firstname" type="text" class="input"required>
+                          </div>
+  
+                          <div class="group">
+                              <label for="lastname" class="label">Last Name</label>
+                              <input id="lastname" name="lastname" type="text" class="input"required>
+                          </div>
+  
+                          <div class="group">
+                              <label for="email" class="label">Email Address</label>
+                              <input id="email" name="email" type="email" class="input"required>
+                          </div>
+  
+                          <div class="group">
+                              <label for="phone" class="label">Phone Number</label>
+                              <input id="phone" name="phone" type="integer"  maxlength ="10" class="input"required>
+                          </div>
+                          <div class="group">
+                              <label for="phone" class="label">Username</label>
+                              <input id="username" name="username" type="text" class="input"required>
+                          </div>
+  
+                          <div class="group">
+                              <label for="password" class="label">Password</label>
+                              <input id="password" name="password" type="password" class="input" data-type="password"required>
+                          </div>
+                          <div class="group">
+                              <label for="cpassword" class="label">Repeat Password</label>
+                              <input id="cpassword" name="cpassword" type="password" class="input" data-type="password"required>
+                          </div>
+  
+                          <div class="group">
+                              <input type="submit" class="button" value="Sign Up">
+                          </div>
+                          <div class="hr"></div>
+                          <div class="foot-lnk">
+                              <label for="tab-1">Already Member?</a>
+                          </div>
+                      </form>
+                  </div>
+  
+              </div>
+          </div>
+      </div>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+      </div> -->
+    </div>
+  </div>
+</div>
+
+
+
+
+
+                </li>
+                {% endif %}
+                
+
+                <li class="nav-item">
+                  <a class="nav-link" data-toggle="modal" data-target="#contact" href="#">Contact</a>
+                  <!-- Button trigger modal -->
+  
+  
+                  <!-- Modal -->
+                  <div class="modal fade" id="contact" data-backdrop="" data-keyboard="false" tabindex="-1"
+                    role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Contact US</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form method="POST" action="">
+                            {% csrf_token %}
+                            <div class="form-group">
+                              <label for="exampleFormControlInput1">Email address</label>
+                              <input type="email" class="form-control" name="email" id="exampleFormControlInput1" placeholder="name@example.com" required>
+                            </div>
+                                                  
+                            <div class="form-group">
+                              <label for="exampleFormControlTextarea1">Example textarea</label>
+                              <textarea class="form-control" id="exampleFormControlTextarea1" name="message" rows="3" required></textarea>
+                            </div>
+                          
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">submit</button>
+                        </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+        {% block timeline %} {% endblock %} {% block vote %} {% endblock %}
+      </div>
+    </div>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'js/infinite.min.js' %}"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+
+    
+    <script>
+      var infinite = new Waypoint.Infinite({
+        element: $(".infinite-container")[0],
+        onBeforePageLoad: function () {
+          $(".loading").show();
+        },
+        onAfterPageLoad: function ($items) {
+          $(".loading").hide();
+        },
+      });
+    </script>
+
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/jqscroll.js' %}"></script>
+
+    <!-- Here is the ajax script -->
+    {% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      /* $('#voteResponse').text("{{count_cart_list}}") */
+
+      $(".voteto").click(function () {
+        var topicid;
+        topicid = $(this).attr("data-topicid");
+        $.ajax({
+          type: "GET",
+          url: "/acceptVote/",
+          data: {
+            topic_id: topicid,
+          },
+          success: function (data) {
+            // $('#btn' + topicid).remove();
+            /* $('#voteResponse').text(data.count_cart_list); */
+            $("#voteResponse").text(data);
+          },
+        });
+      });
+    </script>
+
+    {% endblock scripts %}
+    <!-- Here is the ajax script -->
+  </body>
+</html>
